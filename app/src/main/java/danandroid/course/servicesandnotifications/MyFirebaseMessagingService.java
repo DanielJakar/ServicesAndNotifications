@@ -30,6 +30,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void handleIntent(Intent intent) {
+
+        String title = intent.getExtras().getString("Title");
+        String shortMessage = intent.getExtras().getString("short");
         // super if the app is in the background :
         //send a push notification "DEFAULT" title and icon
 
@@ -38,7 +41,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         //send the push to onMessageReceived
 
         Intent contentIntent = new Intent(this, MainActivity.class);
-        //put some extras //TODO: take some extras from the original cloud massage
+        //put some extras
         PendingIntent pi = PendingIntent.getActivity(this, 1, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         //Deprecated in API Level O
@@ -49,8 +52,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
             Notification.Builder builder = new Notification.Builder(this, channelName);
 
             //title, text, small icon, ->99.9 contentIntent, setAutoCancel
-            builder.setContentTitle("Hello").
-                    setContentText("This is the text").
+            builder.setContentTitle(title).
+                    setContentText(shortMessage).
                     setSmallIcon(R.drawable.ic_note).
                     setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher_round)).
                     setBadgeIconType(Notification.BADGE_ICON_LARGE).
@@ -62,8 +65,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         }else {
             Notification.Builder builder = new Notification.Builder(this);
 
-            builder.setContentTitle("Hello").
-                    setContentText("This is the text").
+            builder.setContentTitle(title).
+                    setContentText(shortMessage).
                     setSmallIcon(R.drawable.ic_note).
                     setPriority(Notification.PRIORITY_HIGH)./*Push the notification from the top*/
                     setDefaults(Notification.DEFAULT_ALL).
